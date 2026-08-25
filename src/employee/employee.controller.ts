@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 
 import { EmployeeService } from './employee.service';
@@ -15,26 +16,36 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
+  // GET all employees
   @Get()
   getEmployees() {
     return this.employeeService.getEmployee();
   }
 
+  // GET one employee by id  ← this is the new one
+  @Get(':id')
+  getEmployeeById(@Param('id', ParseIntPipe) id: number) {
+    return this.employeeService.getEmployeeById(id);
+  }
+
+  // POST
   @Post()
   createEmployee(@Body() employee: CreateEmployeeDto) {
     return this.employeeService.createEmployee(employee);
   }
 
+  // PUT
   @Put(':id')
   updateEmployee(
-    @Param('id') id: string,
-    @Body() data: CreateEmployeeDto,   // using same DTO for now
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: CreateEmployeeDto,
   ) {
-    return this.employeeService.updateEmployee(Number(id), data);
+    return this.employeeService.updateEmployee(id, data);
   }
 
+  // DELETE
   @Delete(':id')
-  deleteEmployee(@Param('id') id: string) {
-    return this.employeeService.deleteEmployee(Number(id));
+  deleteEmployee(@Param('id', ParseIntPipe) id: number) {
+    return this.employeeService.deleteEmployee(id);
   }
 }

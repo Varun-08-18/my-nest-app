@@ -45,6 +45,15 @@ export class EmployeeService {
   getEmployee() {
     return this.employee;
   }
+  getEmployeeById(id: number) {
+  const employee = this.employee.find((emp) => emp.id === id);
+
+  if (!employee) {
+    return `Employee with id ${id} not found`;
+  }
+
+  return employee;
+}
 
   // POST
   createEmployee(employee: any) {
